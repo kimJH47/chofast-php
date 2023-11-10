@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Exceptions;
+
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Throwable;
+
+class RestExceptionHandler extends ExceptionHandler
+{
+    public function render($request, Throwable $e)
+    {
+        if ($e instanceof CustomException) {
+            return response()->json([
+                'message' => 'An error occurred: ' . $e->getMessage(),
+            ], 404, [], JSON_UNESCAPED_UNICODE);
+        }
+        return parent::render($request, $e);
+    }
+}
