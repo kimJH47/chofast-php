@@ -6,4 +6,5 @@ Route::controller(PostController::class)
     ->prefix("/post")
     ->group(function () {
         Route::get('/{id}', 'findOne');
+        Route::post('', 'save');
     });

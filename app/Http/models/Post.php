@@ -33,20 +33,9 @@ class Post
         return $this->content;
     }
 
-    public function getCreatedAt(): string
-    {
-        return $this->createdAt;
-    }
-
     public function getUserName(): string
     {
         return $this->userName;
-    }
-
-
-    public static function create(array $result): Post
-    {
-        return new  Post($result['id'], $result['content'], $result['created_at'], $result['user_name']);
     }
 
     public static function createWithModel($model): Post
