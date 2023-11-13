@@ -7,7 +7,7 @@ use Firebase\JWT\JWT;
 class JwtProvider
 {
     private const ALGORITHM = 'HS256';
-    private const EXPIRED_TIME = 1000 * 60 * 60 * 3; //3 hour
+    private const EXPIRED_TIME = 60 * 60 * 3; //3 hour
     private string $key;
 
     /**
@@ -20,7 +20,7 @@ class JwtProvider
 
     public function generate(string $user): string
     {
-        $payload = ['name' => $user, 'exp' => self::EXPIRED_TIME];
+        $payload = ['name' => $user, 'exp' => time() + self::EXPIRED_TIME];
         return JWT::encode($payload, $this->key, self::ALGORITHM, null, null);
     }
 }
