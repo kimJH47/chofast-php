@@ -45,4 +45,12 @@ class PostService
             throw new CustomException("user not found");
         }
     }
+
+    public function findByRecently(int $index): array
+    {
+        $posts = $this->postDao->findAllWithPageOrderByRecently($index);
+        return array_map(function ($post) {
+            return PostDto::create($post);
+        }, $posts);
+    }
 }

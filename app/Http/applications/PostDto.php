@@ -23,7 +23,6 @@ class PostDto implements \JsonSerializable
         $this->userName = $userName;
     }
 
-
     public function getId(): string
     {
         return $this->id;
@@ -39,13 +38,12 @@ class PostDto implements \JsonSerializable
         return $this->userName;
     }
 
-
     public static function create(Post $post): PostDto
     {
         return new PostDto($post->getId(), $post->getContent(), $post->getUserName());
     }
 
-    public function jsonSerialize(): mixed
+    public function jsonSerialize(): array
     {
         return [
             'id' => $this->id,

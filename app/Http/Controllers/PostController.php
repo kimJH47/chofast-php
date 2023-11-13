@@ -23,7 +23,7 @@ class PostController extends Controller
     function findOne(string $id): JsonResponse
     {
         $postDto = $this->postService->findOne($id);
-        return response()->json($postDto, 200);
+        return response()->json($postDto);
     }
 
     function save(Request $request): JsonResponse
@@ -31,5 +31,10 @@ class PostController extends Controller
         $id = $this->postService->save(savePostDto: SavePostDto::create($request::getContent()));
         return response()->json(['id' => $id], 201)
             ->header('Location', $request::host() . '/api/post/' . $id);
+    }
+
+    function findByRecently(int $index): JsonResponse
+    {
+        return response()->json($this->postService->findByRecently($index));
     }
 }

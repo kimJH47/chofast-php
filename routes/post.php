@@ -8,4 +8,5 @@ Route::controller(PostController::class)
         Route::get('/{id}', 'findOne');
         Route::post('', 'save')
         ->middleware("jwt-auth");
+        Route::get('/feed/{index}', 'findByRecently');
     });
