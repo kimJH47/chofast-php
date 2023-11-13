@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\DefaultRestApiHeader;
+use App\Http\Middleware\JwtAuthentication;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -44,8 +45,11 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\ThrottleRequests::class . ':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class
         ],
-        'rest-api'=>[
+        'rest-api' => [
             DefaultRestApiHeader::class
+        ],
+        'jwt-auth' => [
+            JwtAuthentication::class
         ]
     ];
 
