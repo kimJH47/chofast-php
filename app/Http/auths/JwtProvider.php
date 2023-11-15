@@ -21,6 +21,6 @@ class JwtProvider
     public function generate(string $user): string
     {
         $payload = ['name' => $user, 'exp' => time() + self::EXPIRED_TIME];
-        return JWT::encode($payload, $this->key, self::ALGORITHM, null, null);
+        return JWT::encode($payload, $this->key, self::ALGORITHM);
     }
 }

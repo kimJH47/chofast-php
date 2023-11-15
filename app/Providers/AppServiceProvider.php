@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Http\applications\AuthService;
 use App\Http\applications\PostService;
 use App\Http\auths\JwtProvider;
 use App\Http\auths\JwtValidator;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
 use App\Http\daos\PostDao;
 use App\Http\daos\UserDao;
@@ -28,6 +30,16 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(JwtAuthentication::class, function (Application $application) {
             return new JwtAuthentication($application->make(JwtValidator::class));
         });
+
+        $this->app->singleton(AuthService::class, function (Application $application) {
+            return new AuthService($application->make(UserDao::class), $application->make(JwtProvider::class));
+        });
+
+        $this->app->singleton(AuthController::class, function (Application $application) {
+            return new AuthController($application->make(AuthService::class));
+        });
+
+
         $this->app->singleton(PostDao::class, function () {
             return new PostDao();
         });
