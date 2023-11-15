@@ -2,7 +2,9 @@
 
 namespace App\Http\daos;
 
+use App\Http\models\User;
 use Illuminate\Support\Facades\DB;
+use function Laravel\Prompts\select;
 
 class UserDao
 {
@@ -14,5 +16,13 @@ class UserDao
             ->select("nick_name")
             ->where("nick_name", $userName)
             ->first() != null;
+    }
+
+    public function findByUserName(string $user) : User
+    {
+        return User::createWithModel(DB::table(self::TABLE_NAME)
+            ->select("password")
+            ->where("nick_name", $user)
+            ->first());
     }
 }
