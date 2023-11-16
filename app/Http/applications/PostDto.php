@@ -3,8 +3,9 @@
 namespace App\Http\applications;
 
 use App\Http\models\Post;
+use JsonSerializable;
 
-class PostDto implements \JsonSerializable
+class PostDto implements JsonSerializable
 {
     private string $id;
     private string $content;
