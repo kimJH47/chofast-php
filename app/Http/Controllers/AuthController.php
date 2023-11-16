@@ -18,13 +18,14 @@ class AuthController
         $this->authService = $authService;
     }
 
-    function getToken(Request $request): string
+    function getToken(Request $request): JsonResponse
     {
         $body = json_decode($request->getContent(), true);
-        return $this->authService->getToken($body['userName'], $body['password']);
+        $tokenDto = $this->authService->getToken($body['userName'], $body['password']);
+        return response()->json($tokenDto);
     }
 
-    function signUp(Request $request) : JsonResponse
+    function signUp(Request $request): JsonResponse
     {
         $body = json_decode($request->getContent(), true);
         $id = $this->authService->signUp($body['userName'], $body['password']);

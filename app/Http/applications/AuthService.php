@@ -25,7 +25,7 @@ class AuthService
     /**
      * @throws CustomException
      */
-    public function getToken(string $userName, string $password): string
+    public function getToken(string $userName, string $password): TokenDto
     {
         $user = $this->userDao->findByUserName($userName);
         if (!$user->isMatchedPassword($password)) {

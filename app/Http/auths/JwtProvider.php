@@ -2,6 +2,7 @@
 
 namespace App\Http\auths;
 
+use App\Http\applications\TokenDto;
 use Firebase\JWT\JWT;
 
 class JwtProvider
@@ -18,9 +19,9 @@ class JwtProvider
         $this->key = $key;
     }
 
-    public function generate(string $user): string
+    public function generate(string $user): TokenDto
     {
         $payload = ['name' => $user, 'exp' => time() + self::EXPIRED_TIME];
-        return JWT::encode($payload, $this->key, self::ALGORITHM);
+        return new TokenDto(JWT::encode($payload, $this->key, self::ALGORITHM), "Bearer", self::EXPIRED_TIME);
     }
 }
