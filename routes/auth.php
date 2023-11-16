@@ -7,4 +7,5 @@ Route::controller(AuthController::class)
     ->prefix("/auth")
     ->group(function () {
         Route::post('/get-token', 'getToken');
+        Route::post('/sign-up', 'signUp');
     });

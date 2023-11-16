@@ -40,4 +40,10 @@ class UserDao
             throw new CustomException("not found post");
         }
     }
+
+    public function save(string $userName, string $password): int
+    {
+        return DB::table(self::TABLE_NAME)
+            ->insertGetId(["nick_name" => $userName, "password" => $password]);
+    }
 }

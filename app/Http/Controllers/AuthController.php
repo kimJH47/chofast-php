@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\applications\AuthService;
-use App\Http\auths\JwtProvider;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class AuthController
@@ -22,5 +22,13 @@ class AuthController
     {
         $body = json_decode($request->getContent(), true);
         return $this->authService->getToken($body['userName'], $body['password']);
+    }
+
+    function signUp(Request $request) : JsonResponse
+    {
+        $body = json_decode($request->getContent(), true);
+        $id = $this->authService->signUp($body['userName'], $body['password']);
+        return response()->json(['id' => $id], 201)
+            ->header('Location', $request->host() . '/api/me/' . $id);
     }
 }

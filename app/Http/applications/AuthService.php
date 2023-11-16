@@ -28,9 +28,25 @@ class AuthService
     public function getToken(string $userName, string $password): string
     {
         $user = $this->userDao->findByUserName($userName);
-        if (!$user->isMatchedPassword(password_hash($password, PASSWORD_BCRYPT))) {
+        if (!$user->isMatchedPassword($password)) {
             throw new CustomException("password not matched");
         }
         return $this->jwtProvider->generate($userName);
+    }
+
+    public function signUp(string $userName, string $password): int
+    {
+        $this->validateUserName($userName);
+        return $this->userDao->save($userName, password_hash($password, PASSWORD_BCRYPT));
+    }
+
+    /**
+     * @throws CustomException
+     */
+    private function validateUserName(string $userName): void
+    {
+        if ($this->userDao->existsUser($userName)) {
+            throw new CustomException("duplicated user name!");
+        }
     }
 }
