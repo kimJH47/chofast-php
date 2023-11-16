@@ -25,7 +25,7 @@ class User
 
     public function isMatchedPassword(string $password): bool
     {
-        return $password === $this->password;
+        return password_verify($password, $this->password);
     }
 
     public static function createWithModel($model): User

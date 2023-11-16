@@ -2,27 +2,42 @@
 
 namespace App\Http\daos;
 
+use App\Exceptions\CustomException;
 use App\Http\models\User;
 use Illuminate\Support\Facades\DB;
-use function Laravel\Prompts\select;
 
 class UserDao
 {
 
     private const TABLE_NAME = "user_info";
-    public function existsUser(string $userName) : bool
+
+    public function existsUser(string $userName): bool
     {
         return DB::table(self::TABLE_NAME)
-            ->select("nick_name")
-            ->where("nick_name", $userName)
-            ->first() != null;
+                ->select("nick_name")
+                ->where("nick_name", $userName)
+                ->first() != null;
     }
 
-    public function findByUserName(string $user) : User
+    /**
+     * @throws CustomException
+     */
+    public function findByUserName(string $user): User
     {
-        return User::createWithModel(DB::table(self::TABLE_NAME)
-            ->select("password")
+        $model = DB::table(self::TABLE_NAME)
             ->where("nick_name", $user)
-            ->first());
+            ->first();
+        $this->validateNull($model);
+        return User::createWithModel($model);
+    }
+
+    /**
+     * @throws CustomException
+     */
+    private function validateNull($model): void
+    {
+        if ($model === null) {
+            throw new CustomException("not found post");
+        }
     }
 }

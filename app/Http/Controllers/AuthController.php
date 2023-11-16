@@ -18,10 +18,9 @@ class AuthController
         $this->authService = $authService;
     }
 
-
     function getToken(Request $request): string
     {
-        $body = $request->getContent();
+        $body = json_decode($request->getContent(), true);
         return $this->authService->getToken($body['userName'], $body['password']);
     }
 }

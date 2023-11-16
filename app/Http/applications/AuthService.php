@@ -28,7 +28,7 @@ class AuthService
     public function getToken(string $userName, string $password): string
     {
         $user = $this->userDao->findByUserName($userName);
-        if (!$user->isMatchedPassword($password)) {
+        if (!$user->isMatchedPassword(password_hash($password, PASSWORD_BCRYPT))) {
             throw new CustomException("password not matched");
         }
         return $this->jwtProvider->generate($userName);
