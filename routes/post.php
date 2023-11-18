@@ -18,3 +18,10 @@ Route::controller(PostController::class)
         Route::get('/{lastId}', 'findByRecently');
     });
 
+Route::controller(PostController::class)
+    ->prefix("/log")
+    ->group(function () {
+        Route::get('', 'findUserLogFirstPage');
+        Route::get('/feed', 'findUserLog');
+    });
+
