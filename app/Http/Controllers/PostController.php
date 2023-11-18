@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\applications\PostService;
 use App\Http\applications\SavePostDto;
+use http\Env\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Request;
 
@@ -45,8 +46,15 @@ class PostController extends Controller
 
     public function findUserLog(Request $request): JsonResponse
     {
-        $username = 'userName';
+        $username = $request::query('userName');
         $lastId = $request::query('lastId');
         return response()->json($this->postService->findByUserName($username, $lastId));
+    }
+
+    public function findUserLogFirstPage(Request $request) : JsonResponse
+    {
+        $userName = $request::query('userName');
+        $byUserNameFirstPage = $this->postService->findByUserNameFirstPage($userName);
+        return response()->json($byUserNameFirstPage);
     }
 }

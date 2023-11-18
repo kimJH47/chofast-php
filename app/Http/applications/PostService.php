@@ -65,6 +65,12 @@ class PostService
         return new PostFeedDto($this->createPosts($posts), $this->calculateLastId($posts));
     }
 
+    public function findByUserNameFirstPage(string $userName) : PostFeedDto
+    {
+        $posts = $this->postDao->findByUserNameFirstPage($userName);
+        return new PostFeedDto($this->createPosts($posts), $this->calculateLastId($posts));
+    }
+
     /**
      * @param array $posts
      * @return PostDto[]|array
