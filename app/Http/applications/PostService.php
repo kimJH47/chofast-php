@@ -62,10 +62,10 @@ class PostService
     public function findByUserName(string $userName, int $lastId): PostFeedDto
     {
         $posts = $this->postDao->findByUserNameWithPageNation($userName, $lastId);
-        return new PostFeedDto($this->createPosts($posts), $this->calculateLastId($posts));
+        return new PostFeedDto($this->createPosts($posts), $lastId - count($posts));
     }
 
-    public function findByUserNameFirstPage(string $userName) : PostFeedDto
+    public function findByUserNameFirstPage(string $userName): PostFeedDto
     {
         $posts = $this->postDao->findByUserNameFirstPage($userName);
         return new PostFeedDto($this->createPosts($posts), $this->calculateLastId($posts));
