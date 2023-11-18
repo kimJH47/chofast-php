@@ -50,18 +50,40 @@ class PostService
     public function findByRecently(int $lastId): PostFeedDto
     {
         $posts = $this->postDao->findAllWithPageOrderByRecently($lastId);
-        return new PostFeedDto(array_map(function ($post) {
-            return PostDto::create($post);
-        }, $posts), $lastId - count($posts));
+        return new PostFeedDto($this->createPosts($posts), $lastId - count($posts));
     }
 
     public function findFirstFeed(): PostFeedDto
     {
         $posts = $this->postDao->findByFirstPageOrderByRecently();
-        return new PostFeedDto(array_map(function ($post) {
+        return new PostFeedDto($this->createPosts($posts), $this->calculateLastId($posts));
+    }
+
+    public function findByUserName(string $userName, int $lastId): PostFeedDto
+    {
+        $posts = $this->postDao->findByUserNameWithPageNation($userName, $lastId);
+        return new PostFeedDto($this->createPosts($posts), $this->calculateLastId($posts));
+    }
+
+    /**
+     * @param array $posts
+     * @return PostDto[]|array
+     */
+    private function createPosts(array $posts): array
+    {
+        return array_map(function ($post) {
             return PostDto::create($post);
-        }, $posts), min(array_map(function (Post $post) {
+        }, $posts);
+    }
+
+    /**
+     * @param array $posts
+     * @return int
+     */
+    private function calculateLastId(array $posts): int
+    {
+        return min(array_map(function (Post $post) {
             return $post->getId();
-        }, $posts)));
+        }, $posts));
     }
 }

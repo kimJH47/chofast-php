@@ -38,8 +38,15 @@ class PostController extends Controller
         return response()->json($this->postService->findByRecently($lastId));
     }
 
-    public function findFirstFeed() : JsonResponse
+    public function findFirstFeed(): JsonResponse
     {
         return response()->json($this->postService->findFirstFeed());
+    }
+
+    public function findUserLog(Request $request): JsonResponse
+    {
+        $username = 'userName';
+        $lastId = $request::query('lastId');
+        return response()->json($this->postService->findByUserName($username, $lastId));
     }
 }
