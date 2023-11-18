@@ -20,21 +20,26 @@ class PostController extends Controller
         $this->postService = $postService;
     }
 
-    function findOne(string $id): JsonResponse
+    public function findOne(string $id): JsonResponse
     {
         $postDto = $this->postService->findOne($id);
         return response()->json($postDto);
     }
 
-    function save(Request $request): JsonResponse
+    public function save(Request $request): JsonResponse
     {
         $id = $this->postService->save(savePostDto: SavePostDto::create($request::getContent()));
         return response()->json(['id' => $id], 201)
             ->header('Location', $request->host() . '/api/post/' . $id);
     }
 
-    function findByRecently(int $index): JsonResponse
+    public function findByRecently(int $lastId): JsonResponse
     {
-        return response()->json($this->postService->findByRecently($index));
+        return response()->json($this->postService->findByRecently($lastId));
+    }
+
+    public function findFirstFeed() : JsonResponse
+    {
+        return response()->json($this->postService->findFirstFeed());
     }
 }

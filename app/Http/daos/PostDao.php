@@ -46,13 +46,29 @@ class PostDao
             );
     }
 
-    public function findAllWithPageOrderByRecently(int $index): array
+    public function findAllWithPageOrderByRecently(int $lastId): array
+    {
+        $posts = DB::table(self::TABLE_NAME)
+            ->select('id', 'content', 'user_name', 'created_at')
+            ->where("id", '<', $lastId)
+            ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'desc')
+            ->limit(10)
+            ->get()
+            ->toArray();
+        if ($posts == null) {
+            return [];
+        }
+        return array_map(array($this, 'mapToPost'), $posts);
+    }
+
+    public function findByFirstPageOrderByRecently(): array
     {
         $posts = DB::table(self::TABLE_NAME)
             ->select('id', 'content', 'user_name', 'created_at')
             ->orderBy('created_at', 'desc')
-            ->offset($index * 20)
-            ->limit(20)
+            ->orderBy('id', 'desc')
+            ->limit(10)
             ->get()
             ->toArray();
         if ($posts == null) {

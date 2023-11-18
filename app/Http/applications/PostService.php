@@ -5,6 +5,7 @@ namespace App\Http\applications;
 use App\Exceptions\CustomException;
 use App\Http\daos\PostDao;
 use App\Http\daos\UserDao;
+use App\Http\models\Post;
 
 class PostService
 {
@@ -21,7 +22,7 @@ class PostService
         $this->userDao = $userDao;
     }
 
-    public function findOne(string $id): PostDto
+    public function findOne(int $id): PostDto
     {
         $post = $this->postDao->findOneById($id);
         return PostDto::create($post);
@@ -46,11 +47,21 @@ class PostService
         }
     }
 
-    public function findByRecently(int $index): array
+    public function findByRecently(int $lastId): PostFeedDto
     {
-        $posts = $this->postDao->findAllWithPageOrderByRecently($index);
-        return array_map(function ($post) {
+        $posts = $this->postDao->findAllWithPageOrderByRecently($lastId);
+        return new PostFeedDto(array_map(function ($post) {
             return PostDto::create($post);
-        }, $posts);
+        }, $posts), $lastId - count($posts));
+    }
+
+    public function findFirstFeed(): PostFeedDto
+    {
+        $posts = $this->postDao->findByFirstPageOrderByRecently();
+        return new PostFeedDto(array_map(function ($post) {
+            return PostDto::create($post);
+        }, $posts), min(array_map(function (Post $post) {
+            return $post->getId();
+        }, $posts)));
     }
 }
