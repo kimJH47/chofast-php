@@ -8,6 +8,7 @@ use App\Http\applications\PostService;
 use App\Http\applications\SavePostDto;
 use App\Http\daos\PostDao;
 use App\Http\daos\UserDao;
+use App\Http\models\Post;
 use PHPUnit\Framework\MockObject\Exception;
 use Tests\TestCase;
 use function Symfony\Component\Translation\t;
@@ -59,5 +60,35 @@ class PostServiceTest extends TestCase
             $savePostDto = new SavePostDto("content", "kims");
             return $this->postService->save($savePostDto);
         }, CustomException::class, "user not found");
+    }
+
+    /**
+     * @test
+     */
+    public function findOne()
+    {
+        $this->postDao->expects($this->once())
+            ->method("findOneById")
+            ->willReturn(new Post(100, "hello", now(), "kims"));
+
+        $postDto = $this->postService->findOne(100);
+        $this->assertEquals($postDto->getId(), 100);
+        $this->assertEquals($postDto->getContent(), "hello");
+        $this->assertEquals($postDto->getUserName(), "kims");
+    }
+
+    /**
+     * @test
+     */
+    public function findOne_post_not_found()
+    {
+        $this->postDao->expects($this->once())
+            ->method("findOneById")
+            ->willThrowException(new CustomException("post not found"));
+
+        $this->assertThrows(function () {
+            $savePostDto = new SavePostDto("content", "kims");
+            return $this->postService->findOne(100);
+        }, CustomException::class, "post not found");
     }
 }
