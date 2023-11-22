@@ -112,7 +112,6 @@ class PostServiceTest extends TestCase
         $postFeedDto = $this->postService->findFirstFeed();
         $this->assertEquals(count($postFeedDto->getPosts()),5);
     }
-
     /**
      * @test
      */
@@ -124,19 +123,55 @@ class PostServiceTest extends TestCase
             $this->createPost(103,"cotent14","kims"),
             $this->createPost(104,"cotent15","tray"),
             $this->createPost(105,"cotent16","kims"),
-            $this->createPost(105,"cotent16","kims"),
-            $this->createPost(105,"cotent16","kims"),
-            $this->createPost(105,"cotent16","kims"),
+            $this->createPost(106,"cotent16","kims"),
+            $this->createPost(107,"cotent16","kims"),
+            $this->createPost(108,"cotent16","kims"),
         ];
 
         $this->postDao->expects($this->once())
             ->method("findAllWithPageOrderByRecently")
             ->willReturn($posts);
 
-        $postFeedDto = $this->postService->findByRecently(10);
+        $postFeedDto = $this->postService->findByRecently(100);
         $this->assertEquals(count($postFeedDto->getPosts()),8);
     }
 
+    /**
+     * @test
+     */
+    public function findByUserNameFirstPage()
+    {
+        $posts = [
+            $this->createPost(101,"sadsad","kims"),
+            $this->createPost(102,"sdsamlk12m32l1","kims"),
+            $this->createPost(103,"하루종일","kims"),
+        ];
+
+        $this->postDao->expects($this->once())
+            ->method("findByUserNameFirstPage")
+            ->willReturn($posts);
+
+        $postFeedDto = $this->postService->findByUserNameFirstPage("kims");
+        $this->assertEquals(count($postFeedDto->getPosts()),3);
+    }
+
+    /**
+     * @test
+     */
+    public function findByUserName()
+    {
+        $posts = [
+            $this->createPost(101,"sadsad","kims"),
+            $this->createPost(102,"sdsamlk12m32l1","kims"),
+        ];
+
+        $this->postDao->expects($this->once())
+            ->method("findByUserNameWithPageNation")
+            ->willReturn($posts);
+
+        $postFeedDto = $this->postService->findByUserName("kims",100);
+        $this->assertEquals(count($postFeedDto->getPosts()),2);
+    }
 
 
     private function createPost(int $id, string $content, string $name) :Post
