@@ -31,7 +31,7 @@ class PostController extends Controller
     {
         $id = $this->postService->save(savePostDto: SavePostDto::create($request::getContent()));
         return response()->json(['id' => $id], 201)
-            ->header('Location', $request->host() . '/api/post/' . $id);
+            ->header('Location', $request::host() . '/api/post/' . $id);
     }
 
     public function findByRecently(int $lastId): JsonResponse
