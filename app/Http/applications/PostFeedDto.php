@@ -18,6 +18,13 @@ class PostFeedDto implements JsonSerializable
         $this->lastId = $lastId;
     }
 
+    public function getPosts(): array
+    {
+        return $this->posts;
+    }
+
+
+
     public function jsonSerialize(): array
     {
         return [

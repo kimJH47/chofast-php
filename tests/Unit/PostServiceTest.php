@@ -91,4 +91,56 @@ class PostServiceTest extends TestCase
             return $this->postService->findOne(100);
         }, CustomException::class, "post not found");
     }
+
+    /**
+     * @test
+     */
+    public function findByFirstPage()
+    {
+        $posts = [
+            $this->createPost(101,"cotent12","kims"),
+            $this->createPost(102,"cotent13","tray"),
+            $this->createPost(103,"cotent14","kims"),
+            $this->createPost(104,"cotent15","tray"),
+            $this->createPost(105,"cotent16","kims"),
+        ];
+
+        $this->postDao->expects($this->once())
+            ->method("findByFirstPageOrderByRecently")
+            ->willReturn($posts);
+
+        $postFeedDto = $this->postService->findFirstFeed();
+        $this->assertEquals(count($postFeedDto->getPosts()),5);
+    }
+
+    /**
+     * @test
+     */
+    public function findByRecently()
+    {
+        $posts = [
+            $this->createPost(101,"cotent12","kims"),
+            $this->createPost(102,"cotent13","tray"),
+            $this->createPost(103,"cotent14","kims"),
+            $this->createPost(104,"cotent15","tray"),
+            $this->createPost(105,"cotent16","kims"),
+            $this->createPost(105,"cotent16","kims"),
+            $this->createPost(105,"cotent16","kims"),
+            $this->createPost(105,"cotent16","kims"),
+        ];
+
+        $this->postDao->expects($this->once())
+            ->method("findAllWithPageOrderByRecently")
+            ->willReturn($posts);
+
+        $postFeedDto = $this->postService->findByRecently(10);
+        $this->assertEquals(count($postFeedDto->getPosts()),8);
+    }
+
+
+
+    private function createPost(int $id, string $content, string $name) :Post
+    {
+        return new Post($id, $content, now(), $name);
+    }
 }
