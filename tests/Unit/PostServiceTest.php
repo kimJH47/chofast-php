@@ -3,7 +3,6 @@
 namespace Tests\Unit;
 
 use App\Exceptions\CustomException;
-use App\Http\applications\PostDto;
 use App\Http\applications\PostService;
 use App\Http\applications\SavePostDto;
 use App\Http\daos\PostDao;
@@ -11,7 +10,6 @@ use App\Http\daos\UserDao;
 use App\Http\models\Post;
 use PHPUnit\Framework\MockObject\Exception;
 use Tests\TestCase;
-use function Symfony\Component\Translation\t;
 
 class PostServiceTest extends TestCase
 {
@@ -54,7 +52,7 @@ class PostServiceTest extends TestCase
     {
         $this->userDao->expects($this->once())
             ->method("existsUser")
-            ->willThrowException(new CustomException("user not found"));
+            ->willReturn(false);
 
         $this->assertThrows(function () {
             $savePostDto = new SavePostDto("content", "kims");
