@@ -22,6 +22,24 @@ class TokenDto implements JsonSerializable
         $this->expiredTime = $expiredTime;
     }
 
+    public function getToken(): string
+    {
+        return $this->token;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function getExpiredTime(): string
+    {
+        return $this->expiredTime;
+    }
+
+
+
+
     public function jsonSerialize(): array
     {
         return [

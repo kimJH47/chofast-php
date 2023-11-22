@@ -2,8 +2,6 @@
 
 namespace App\Http\models;
 
-use App\Http\daos\UserDao;
-
 class User
 {
     private int $id;

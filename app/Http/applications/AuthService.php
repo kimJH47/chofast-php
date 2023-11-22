@@ -21,7 +21,6 @@ class AuthService
         $this->jwtProvider = $jwtProvider;
     }
 
-
     /**
      * @throws CustomException
      */
